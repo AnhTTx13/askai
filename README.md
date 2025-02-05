@@ -9,13 +9,10 @@ Ask AI in terminal 😀
 - Go installed
 - Command line interface
 
-**1. Get the repository:**
+**1. Install the repository:**
 
 ```bash
-git clone github.com/AnhBigBrother/askai
-cd askai
-
-go mod tidy
+go install github.com/AnhBigBrother/askai
 ```
 
 **2. Configure Google Gemini API:**
@@ -54,12 +51,6 @@ go mod tidy
     ```
 
   - For more about setup environment variables (Window, MacOs), read [here.](https://ai.google.dev/gemini-api/docs/api-key)
-
-**3. Install binary file:**
-
-```bash
-go install
-```
 
 ## Usage
 
