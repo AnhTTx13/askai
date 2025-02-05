@@ -9,13 +9,7 @@ Ask AI in terminal 😀
 - Go installed
 - Command line interface
 
-**1. Install the repository:**
-
-```bash
-go install github.com/AnhBigBrother/askai
-```
-
-**2. Configure Google Gemini API:**
+**1. Setup Gemini API Key:**
 
 - Get your API key:
   - Go to [Google AI Studio](https://aistudio.google.com)  
@@ -51,6 +45,12 @@ go install github.com/AnhBigBrother/askai
     ```
 
   - For more about setup environment variables (Window, MacOs), read [here.](https://ai.google.dev/gemini-api/docs/api-key)
+
+**2. Install the repository:**
+
+```bash
+go install github.com/AnhBigBrother/askai
+```
 
 ## Usage
 
