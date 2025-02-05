@@ -14,7 +14,8 @@ import (
 )
 
 type CommandFlag struct {
-	Lang string
+	Lang       string
+	IsProModel bool
 }
 
 var (
@@ -25,7 +26,7 @@ var (
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 	}
 }
 
@@ -68,7 +69,7 @@ func init() {
 		Long: `Prompt to ask ai
 		
 Example: 
-	askai --lang Vietnamese write a story about a magic backpack.
+	askai --pro --lang Vietnamese write a story about a magic backpack.
 	`,
 		Run: func(cmd *cobra.Command, args []string) {
 			prompt := strings.Join(args, " ")
@@ -81,16 +82,24 @@ Example:
 			ctx := cmd.Context()
 			client, _ := genai.NewClient(ctx, option.WithAPIKey(apiKey))
 
-			err := useModel(client, "gemini-1.5-pro-latest", ctx, prompt)
-			if err != nil {
-				fmt.Println(err)
-				err = useModel(client, "gemini-1.5-flash", ctx, prompt)
+			if cf.IsProModel {
+				err := useModel(client, "gemini-1.5-pro-latest", ctx, prompt)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println(err.Error())
+					err = useModel(client, "gemini-1.5-flash", ctx, prompt)
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+				}
+			} else {
+				err := useModel(client, "gemini-1.5-flash", ctx, prompt)
+				if err != nil {
+					fmt.Println(err.Error())
 				}
 			}
 		},
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&cf.Lang, "lang", "l", "English", "Specify the responses language")
+	rootCmd.PersistentFlags().StringVar(&cf.Lang, "lang", "English", "Specify the responses language")
+	rootCmd.PersistentFlags().BoolVar(&cf.IsProModel, "pro", false, `Use gemini-1.5-pro-latest model (default use "gemini-1.5-flash")`)
 }

@@ -17,7 +17,7 @@ Ask AI in terminal 😀
   - Click "Create API Key"  
   - Copy the generated key  
   
-- Set up environment variables (bash-Linux):  
+- Set environment variables (bash-Linux):  
   
   - Check if had bash's configuration file
   
@@ -55,19 +55,21 @@ go install github.com/AnhBigBrother/askai
 ## Usage
 
 ```bash
-askai [flags] [your_promt]
+askai [flags] [your_prompt]
 ```
 
 **Flags:**
 
-- ```--lang```,  ```-l```   Specify the response language (default "English")  
+- ```--pro```    Use gemini-1.5-pro-latest model (default use "gemini-1.5-flash")
 
-- ```--help```, ```-h```   Help for askai  
+- ```--lang```   Specify the response language (default "English")  
+
+- ```--help```   Help for askai  
 
 **Example:**
 
 ```bash
-askai --lang Vietnamese write a story about a magic backpack.
+askai --pro --lang Vietnamese write a story about a magic backpack.
 ```
 
 **Note:**
