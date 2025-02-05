@@ -9,7 +9,7 @@ Ask AI in terminal 😀
 - Go installed
 - Command line interface
 
-**1.Get the repository:**
+**1. Get the repository:**
 
 ```bash
 git clone github.com/AnhBigBrother/askai
@@ -18,7 +18,7 @@ cd askai
 go mod tidy
 ```
 
-**2.Configure Google Gemini API:**
+**2. Configure Google Gemini API:**
 
 - Get your API key:
   - Go to [Google AI Studio](https://aistudio.google.com)  
@@ -41,7 +41,7 @@ go mod tidy
     open ~/.bashrc
     ```
 
-  - Set your API key by adding the following export command:
+  - Set your API key by adding the following line into ~/.bashrc file:
   
     ```bash
     export GEMINI_API_KEY=<YOUR_API_KEY>
@@ -53,9 +53,9 @@ go mod tidy
     source ~/.bashrc
     ```
 
-  - For more about setup environment variable (Window, MacOs), read [here.]("https://ai.google.dev/gemini-api/docs/api-key")
+  - For more about setup environment variables (Window, MacOs), read [here.](https://ai.google.dev/gemini-api/docs/api-key)
 
-**3.Install binary file:**
+**3. Install binary file:**
 
 ```bash
 go install
@@ -82,5 +82,4 @@ askai --lang Vietnamese write a story about a magic backpack.
 **Note:**
 
 - Never share or commit your API key
-- Keep your `.env` file private
 - Regularly rotate your API key for security
