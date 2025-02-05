@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/google/generative-ai-go/genai"
-	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
@@ -56,13 +55,9 @@ func useModel(client *genai.Client, model_name string, ctx context.Context, prom
 }
 
 func init() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
-	apiKey := os.Getenv("GOOGLE_API_KEY")
+	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
-		log.Fatal("missing GOOGLE_API_KEY")
+		log.Fatal("missing GEMINI_API_KEY")
 	}
 
 	cf = &CommandFlag{}

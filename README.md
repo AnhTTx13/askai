@@ -25,16 +25,35 @@ go mod tidy
   - Sign in with your Google account  
   - Click "Create API Key"  
   - Copy the generated key  
+  
+- Set up environment variables (bash-Linux):  
+  
+  - Check if had bash's configuration file
+  
+    ```bash
+    ~/.bashrc
+    ```
 
-- Set up environment variables:  
-  - Create a `.env` file in the project root  
-  - Add your API key:  
+  - If the response is "No such file or directory", you will need to create this file before open it
 
-     ```env  
-     GOOGLE_API_KEY=your_google_api_key
-     ```
+    ```bash
+    touch ~/.bashrc
+    open ~/.bashrc
+    ```
 
-  - Add `.env` to your `.gitignore` file
+  - Set your API key by adding the following export command:
+  
+    ```bash
+    export GEMINI_API_KEY=<YOUR_API_KEY>
+    ```
+
+  - After saving the file, apply the changes by running:
+
+    ```bash
+    source ~/.bashrc
+    ```
+
+  - For more about setup environment variable (Window, MacOs), read [here.]("https://ai.google.dev/gemini-api/docs/api-key")
 
 **3.Install binary file:**
 
