@@ -17,22 +17,24 @@ Ask AI in terminal 😀
   - Click "Create API Key"  
   - Copy the generated key  
   
-- Set environment variables (bash-Linux):  
+- Set environment variables (bas/Zsh):  
   
-  - Check if had bash's configuration file
+  - Check if you had a configuration file
   
     ```bash
     ~/.bashrc
+    # or ~/.zshrc if you are using zsh
     ```
 
   - If the response is "No such file or directory", you will need to create this file before open it
 
     ```bash
     touch ~/.bashrc
-    open ~/.bashrc
+    nano ~/.bashrc
+    # or nano ~/.zshrc
     ```
 
-  - Set your API key by adding the following line into ~/.bashrc file:
+  - Set your API key by adding the following line into ~/.bashrc (or ~/.zshrc) file:
   
     ```bash
     export GEMINI_API_KEY=<YOUR_API_KEY>
@@ -42,9 +44,8 @@ Ask AI in terminal 😀
 
     ```bash
     source ~/.bashrc
+    # or source ~/.zshrc
     ```
-
-  - For more about setup environment variables (Window, MacOs), read [here.](https://ai.google.dev/gemini-api/docs/api-key)
 
 **2. Install the repository:**
 
@@ -60,30 +61,32 @@ askai [flags] [your_prompt]
 
 **Flags:**
 
-- ```--lang <string>```   Specify the responses language (default "English")  
+- ```--lang [string]```   Specify the responses language (default "English")  
 
-- ```--model <string>```    Specify what AI model to use (default "gemini-1.5-flash").
+- ```--model [string]```    Specify what AI model to use (default "gemini-1.5-flash").
   Avaiable model:
   - **gemini-2.0-flash**: Next generation features, speed, and multimodal generation for a diverse variety of tasks
-  - **gemini-2.0-flash-lite-preview**: A Gemini 2.0 Flash model optimized for cost efficiency and low latency
+  - **gemini-2.0-flash-lite**: A Gemini 2.0 Flash model optimized for cost efficiency and low latency
   - **gemini-1.5-flash**: Fast and versatile performance across a diverse variety of tasks
-  - **gemini-1.5-pro**: Complex reasoning tasks requiring more intelligence
-  _[*More about Google Gemini model.](https://ai.google.dev/gemini-api/docs/models/gemini)_
+  - **gemini-1.5-pro**: Complex reasoning tasks requiring more intelligence  
+  _[*More about Google Gemini models.](https://ai.google.dev/gemini-api/docs/models/gemini)_  
 
-- ```--temp <float32>```   Controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0]. (default 1)
+- ```--stream [boolean]``` Enable text stream effect (like Gemini, chatGPT, etc), but can not render markdown. (default false)
 
-- ```--limit <int32>```    Sets the maximum number of tokens to include in a candidate. (default 8192)
+- ```--temp [float32]```   Controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0]. (default 1)
 
-- ```--topP <float32>```   Changes how the model selects tokens for output. Tokens are selected from the most to least probable until the sum of their probabilities equals the topP value. (default 0.95)
+- ```--limit [int32]```    Sets the maximum number of tokens to include in a candidate. (default 8192)
 
-- ```--topK <int32>```     Changes how the model selects tokens for output. A topK of 1 means the selected token is the most probable among all the tokens in the model's vocabulary, while a topK of 3 means that the next token is selected from among the 3 most probable using the temperature. Tokens are further filtered based on topP with the final token selected using temperature sampling. (default 40)
+- ```--topP [float32]```   Changes how the model selects tokens for output. Tokens are selected from the most to least probable until the sum of their probabilities equals the topP value. (default 0.95)
+
+- ```--topK [int32]```     Changes how the model selects tokens for output. A topK of 1 means the selected token is the most probable among all the tokens in the model's vocabulary, while a topK of 3 means that the next token is selected from among the 3 most probable using the temperature. Tokens are further filtered based on topP with the final token selected using temperature sampling. (default 40)
 
 - ```--help```   Help for askai  
 
 **Example:**
 
 ```bash
-askai --model=gemini-2.0-flash --lang=Vietnamese --temp=1.5 write a story about a magic backpack.
+askai --model=gemini-2.0-flash --lang=Vietnamese --temp=1.5 --stream write a story about a magic backpack.
 ```
 
 **Note:**
