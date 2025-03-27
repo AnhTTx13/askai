@@ -14,7 +14,7 @@ import (
 
 func newModel(client *genai.Client, model_name string, ctx context.Context, prompt string) error {
 	fmt.Println()
-  termWidth, _, err := term.GetSize(0)
+	termWidth, _, err := term.GetSize(0)
 	if err != nil {
 		termWidth = 80
 	}
@@ -35,7 +35,7 @@ func newModel(client *genai.Client, model_name string, ctx context.Context, prom
 
 func printStream(ctx context.Context, model *genai.GenerativeModel, prompt string) error {
 	fmt.Println()
-  iter := model.GenerateContentStream(ctx, genai.Text(prompt))
+	iter := model.GenerateContentStream(ctx, genai.Text(prompt))
 	for {
 		res, err := iter.Next()
 		if err == iterator.Done {
@@ -69,6 +69,6 @@ func renderMarkdown(ctx context.Context, model *genai.GenerativeModel, prompt st
 	result := markdown.Render(source, termWidth, 0)
 	loader.Stop()
 	fmt.Println()
-  fmt.Println(string(result))
+	fmt.Println(string(result))
 	return nil
 }
