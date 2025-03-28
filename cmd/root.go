@@ -40,7 +40,7 @@ func init() {
 		Long: `Prompt to ask ai
 		
 Example: 
-	askai --model=gemini-2.0-flash --lang=Vietnamese --temp=2.0 --limit=4000 write a story about a magic backpack.
+	askai --model=gemini-2.0-flash --lang=Vietnamese --temp=2.0 --limit=4000 "write a story about a magic backpack."
 	`,
 		Run: func(cmd *cobra.Command, args []string) {
 			prompt := strings.Join(args, " ")
@@ -72,10 +72,11 @@ Example:
 	}
 
 	rootCmd.PersistentFlags().StringVar(&cf.Lang, "lang", "English", "Specify the responses language")
-	rootCmd.PersistentFlags().StringVar(&cf.Model, "model", "gemini-1.5-flash", `Specify what AI model to use
-Avaiable model: 
+	rootCmd.PersistentFlags().StringVar(&cf.Model, "model", "gemini-2.0-flash", `Specify what AI model to use
+Avaiable model:
+    - "gemini-2.5-pro-exp-03-25": Enhanced thinking and reasoning, multimodal understanding, advanced coding, and more
 	- "gemini-2.0-flash": Next generation features, speed, and multimodal generation for a diverse variety of tasks
-	- "gemini-2.0-flash-lite-preview": A Gemini 2.0 Flash model optimized for cost efficiency and low latency
+	- "gemini-2.0-flash-lite": A Gemini 2.0 Flash model optimized for cost efficiency and low latency
 	- "gemini-1.5-flash": Fast and versatile performance across a diverse variety of tasks
 	- "gemini-1.5-pro": Complex reasoning tasks requiring more intelligence
 `)

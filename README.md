@@ -63,7 +63,7 @@ askai [flags] [your_prompt]
 
 - ```--lang [string]```   Specify the responses language (default "English")  
 
-- ```--model [string]```    Specify what AI model to use (default "gemini-1.5-flash").
+- ```--model [string]```    Specify what AI model to use (default "gemini-2.0-flash").
   Avaiable model:
   - **gemini-2.0-flash**: Next generation features, speed, and multimodal generation for a diverse variety of tasks
   - **gemini-2.0-flash-lite**: A Gemini 2.0 Flash model optimized for cost efficiency and low latency
@@ -86,7 +86,7 @@ askai [flags] [your_prompt]
 **Example:**
 
 ```bash
-askai --model=gemini-2.0-flash --lang=Vietnamese --temp=1.5 --stream write a story about a magic backpack.
+askai --model=gemini-2.0-flash --lang=Vietnamese --temp=1.5 --stream "write a story about a magic backpack."
 ```
 
 **Note:**

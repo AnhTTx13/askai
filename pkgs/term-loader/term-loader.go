@@ -46,4 +46,5 @@ func (l *Loader) Start() {
 
 func (l *Loader) Stop() {
 	l.stop_chan <- 'x'
+	close(l.stop_chan)
 }
