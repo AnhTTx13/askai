@@ -2,37 +2,36 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"strings"
 
+	"github.com/AnhTTx13/askai/internal/data"
+	"github.com/AnhTTx13/askai/internal/model"
 	"github.com/google/generative-ai-go/genai"
 	"github.com/spf13/cobra"
 	"google.golang.org/api/option"
 )
 
-type CommandFlag struct {
-	Lang            string
-	Model           string
-	Temperature     float32
-	MaxOutputTokens int32
-	TopP            float32
-	TopK            int32
-	TextStream      bool
+type ModelConfigFlag struct {
+	Lang   string
+	Model  string
+	Temp   float32
+	MaxOT  int32
+	TopP   float32
+	TopK   int32
+	Stream bool
 }
 
+var prompt string
+
 var (
-	cf      *CommandFlag
+	cf      *ModelConfigFlag
+	opts    data.Options
 	rootCmd *cobra.Command
 )
 
 func init() {
-	apiKey := os.Getenv("GEMINI_API_KEY")
-	if apiKey == "" {
-		log.Fatal("missing GEMINI_API_KEY")
-	}
-
-	cf = &CommandFlag{}
+	cf = &ModelConfigFlag{}
+	opts = data.LoadOptions()
 
 	rootCmd = &cobra.Command{
 		Use:   "askai",
@@ -43,27 +42,32 @@ Example:
 	askai --model=gemini-2.0-flash --lang=Vietnamese --temp=2.0 --limit=4000 "write a story about a magic backpack."
 	`,
 		Run: func(cmd *cobra.Command, args []string) {
-			prompt := strings.Join(args, " ")
 			prompt = strings.TrimPrefix(prompt, " ")
 			prompt = strings.TrimSuffix(prompt, " ")
-
-			prompt = fmt.Sprintf("%s\nResponse in %s", prompt, cf.Lang)
+			if prompt == "" {
+				fmt.Println("Specify your prompt with -p flag")
+				return
+			}
 
 			ctx := cmd.Context()
-			client, _ := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+			client, _ := genai.NewClient(ctx, option.WithAPIKey(opts.ApiKey))
 
-			if cf.Model == "gemini-1.5-flash" {
-				err := newModel(client, cf.Model, ctx, prompt)
+			model := model.NewModel(cf.Lang, cf.Model, *client, cf.Temp, cf.MaxOT, cf.TopP, cf.TopK, cf.Stream)
+
+			if model.ModelName == "gemini-1.5-flash" {
+				err := model.GenAnswer(ctx, prompt)
 				if err != nil {
 					fmt.Println(err.Error())
 				}
 				return
 			}
 
-			err := newModel(client, cf.Model, ctx, prompt)
+			err := model.GenAnswer(ctx, prompt)
 			if err != nil {
 				fmt.Println(err.Error())
-				err = newModel(client, "gemini-1.5-flash", ctx, prompt)
+				// Roll back to gemini-1.5-flash
+				model.ModelName = "gemini-1.5-flash"
+				err = model.GenAnswer(ctx, prompt)
 				if err != nil {
 					fmt.Println(err.Error())
 				}
@@ -71,8 +75,15 @@ Example:
 		},
 	}
 
-	rootCmd.PersistentFlags().StringVar(&cf.Lang, "lang", "English", "Specify the responses language")
-	rootCmd.PersistentFlags().StringVar(&cf.Model, "model", "gemini-2.0-flash", `Specify what AI model to use
+	rootCmd.AddCommand(setApiKey)
+	rootCmd.AddCommand(setOpt)
+	rootCmd.AddCommand(listModels)
+	rootCmd.AddCommand(listOpts)
+	rootCmd.AddCommand(reset)
+
+	rootCmd.PersistentFlags().StringVarP(&prompt, "prompt", "p", "", "Specify your prompt")
+	rootCmd.PersistentFlags().StringVar(&cf.Lang, "lang", opts.Lang, "Specify the responses language")
+	rootCmd.PersistentFlags().StringVar(&cf.Model, "model", opts.Model, `Specify what AI model to use
 Avaiable model:
     - "gemini-2.5-pro-exp-03-25": Enhanced thinking and reasoning, multimodal understanding, advanced coding, and more
 	- "gemini-2.0-flash": Next generation features, speed, and multimodal generation for a diverse variety of tasks
@@ -80,11 +91,11 @@ Avaiable model:
 	- "gemini-1.5-flash": Fast and versatile performance across a diverse variety of tasks
 	- "gemini-1.5-pro": Complex reasoning tasks requiring more intelligence
 `)
-	rootCmd.PersistentFlags().Float32Var(&cf.Temperature, "temp", 1, "Controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0].")
-	rootCmd.PersistentFlags().Float32Var(&cf.TopP, "topP", 0.95, "Changes how the model selects tokens for output. Tokens are selected from the most to least probable until the sum of their probabilities equals the topP value.")
-	rootCmd.PersistentFlags().Int32Var(&cf.TopK, "topK", 40, "Changes how the model selects tokens for output. A topK of 1 means the selected token is the most probable among all the tokens in the model's vocabulary, while a topK of 3 means that the next token is selected from among the 3 most probable using the temperature. Tokens are further filtered based on topP with the final token selected using temperature sampling.")
-	rootCmd.PersistentFlags().Int32Var(&cf.MaxOutputTokens, "limit", 8192, "Sets the maximum number of tokens to include in a candidate.")
-	rootCmd.PersistentFlags().BoolVar(&cf.TextStream, "stream", false, "Enable text stream effect (like Gemini, chatGPT, etc) but can not render markdown")
+	rootCmd.PersistentFlags().Float32Var(&cf.Temp, "temp", opts.Temp, "Controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0].")
+	rootCmd.PersistentFlags().Float32Var(&cf.TopP, "topP", opts.TopP, "Changes how the model selects tokens for output. Tokens are selected from the most to least probable until the sum of their probabilities equals the topP value.")
+	rootCmd.PersistentFlags().Int32Var(&cf.TopK, "topK", opts.TopK, "Changes how the model selects tokens for output. A topK of 1 means the selected token is the most probable among all the tokens in the model's vocabulary, while a topK of 3 means that the next token is selected from among the 3 most probable using the temperature. Tokens are further filtered based on topP with the final token selected using temperature sampling.")
+	rootCmd.PersistentFlags().Int32Var(&cf.MaxOT, "limit", opts.MaxOT, "Sets the maximum number of tokens to include in a candidate.")
+	rootCmd.PersistentFlags().BoolVar(&cf.Stream, "stream", false, "Enable text stream effect (like Gemini, chatGPT, etc) but can not render markdown")
 }
 
 func Execute() {

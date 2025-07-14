@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/AnhBigBrother/askai/cmd"
+	"github.com/AnhTTx13/askai/cmd"
 )
 
 func main() {

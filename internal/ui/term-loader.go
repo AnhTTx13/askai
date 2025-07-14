@@ -1,4 +1,4 @@
-package termloader
+package ui
 
 import (
 	"fmt"

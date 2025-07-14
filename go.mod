@@ -1,4 +1,4 @@
-module github.com/AnhBigBrother/askai
+module github.com/AnhTTx13/askai
 
 go 1.23.0
 
