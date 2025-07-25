@@ -12,7 +12,7 @@ Ask AI in terminal 😀
 **1. Install the repository:**
 
 ```sh
-go install github.com/AnhTTx13/askai
+go install github.com/AnhTTx13/askai@latest
 ```
 
 **2. Setup Gemini API Key:**
@@ -23,7 +23,7 @@ go install github.com/AnhTTx13/askai
   - Click "Create API Key"  
   - Copy the generated key  
   
-- Set environment variables (bash/zsh) by add `export GEMINI_API_KEY=[YOUR_API_KEY]` into your bashrc/zshrc file and source it:
+- Set environment variables by add `export GEMINI_API_KEY=[YOUR_API_KEY]` into your bashrc/zshrc file and source it:
 
     ```sh
     source ~/.bashrc

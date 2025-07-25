@@ -51,12 +51,10 @@ func LoadOptions() Options {
 	}
 	if opts.ApiKey == "" {
 		apiKey := os.Getenv("GEMINI_API_KEY")
-		if apiKey == "" {
-			fmt.Println("Missing API key")
-			os.Exit(1)
+		if apiKey != "" {
+			opts.ApiKey = apiKey
+			optsFile.Save(opts)
 		}
-		opts.ApiKey = apiKey
-		optsFile.Save(opts)
 	}
 	return opts
 }
