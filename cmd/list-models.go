@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"slices"
 	"strings"
@@ -21,6 +22,10 @@ Example:
 	askai list-models
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		if opts.ApiKey == "" {
+			fmt.Println("Missing API key")
+			os.Exit(1)
+		}
 		ctx := cmd.Context()
 		client, _ := genai.NewClient(ctx, option.WithAPIKey(opts.ApiKey))
 
